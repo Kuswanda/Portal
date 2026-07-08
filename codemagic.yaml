@@ -8,7 +8,7 @@ workflows:
       - name: Install Capacitor CLI
         script: npm install -g @capacitor/cli
       - name: Add Android Platform
-        script: npx cap add android --force
+        script: npx cap add android || echo "Android platform already exists"
       - name: Sync Capacitor
         script: npx cap sync android
       - name: Build APK
