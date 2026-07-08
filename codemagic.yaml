@@ -2,10 +2,11 @@ workflows:
   android-build:
     name: Android Build
     instance_type: mac_mini_m1
-    max_build_duration: 120
     scripts:
       - name: Install dependencies
         script: npm install
+      - name: Add Android Platform
+        script: npx cap add android --force
       - name: Sync Capacitor
         script: npx cap sync android
       - name: Build APK
