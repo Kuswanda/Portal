@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal GIS</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@capacitor/core@6/dist/capacitor.js"></script>
+  <script src="https://unpkg.com/@capacitor/device@6.0.0/dist/plugin.js"></script>
 </head>
-<body style="text-align:center; padding-top:50px; font-family:sans-serif;">
-  <h3>Sedang Mengecek Device...</h3>
-  <p>Mohon tunggu</p>
+<body>
+  <h3>Login Portal GIS</h3>
+  <input id="nip" placeholder="Masukkan NIP">
+  <input id="nama" placeholder="Masukkan Nama">
+  <button onclick="login()">Login</button>
+  <p id="pesan"></p>
 
-  <script>
-    // URL Apps Script WebApp kamu. GANTI INI
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+<script>
+  let DEVICE_ID = "";
 
-    async function main() {
-      try {
-        // Cek apakah jalan di APK Capacitor
-        if (window.Capacitor && window.Capacitor.Plugins.Device) {
-          const info = await window.Capacitor.Plugins.Device.getId();
-          const imei = info.identifier; // INI ID PATEN DARI HP
-          
-          // Redirect ke Apps Script + bawa IMEI
-          window.location.href = APPS_SCRIPT_URL + "?imei=" + imei;
-          
-        } else {
-          document.body.innerHTML = "<h3>Gagal</h3><p>Buka aplikasi ini hanya lewat APK</p>";
-        }
-      } catch(e) {
-        document.body.innerHTML = "<h3>Error</h3><p>" + e + "</p>";
+  // 1. AMBIL IMEI SAAT APK DIBUKA
+  window.onload = async function() {
+    const info = await Capacitor.Device.getId();
+    DEVICE_ID = info.identifier; // UUID HP
+    document.getElementById("pesan").innerText = "Device: " + DEVICE_ID;
+  }
+
+  // 2. KIRIM KE APPS SCRIPT
+  function login(){
+    const nip = document.getElementById("nip").value;
+    const nama = document.getElementById("nama").value;
+
+    google.script.run.withSuccessHandler(function(res){
+      if(res.status == "OK"){
+        window.location.href = res.redirect; // Langsung ke portal
+      } else {
+        document.getElementById("pesan").innerText = res.msg;
       }
-    }
-    main();
-  </script>
+    }).cekLogin(nip, nama, DEVICE_ID);
+  }
+</script>
 </body>
 </html>
