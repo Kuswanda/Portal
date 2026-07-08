@@ -2,6 +2,8 @@ workflows:
   android-build:
     name: Android Build
     instance_type: mac_mini_m1
+    environment:
+      java: 21  # <-- INI YANG DITAMBAH
     scripts:
       - name: Install dependencies
         script: npm install
