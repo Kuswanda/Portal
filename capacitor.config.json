@@ -1,0 +1,13 @@
+{
+  "appId": "com.kantor.portalgis",
+  "appName": "Portal GIS",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Device": {
+      "android": true
+    }
+  }
+}
